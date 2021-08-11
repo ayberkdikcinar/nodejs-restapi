@@ -1,0 +1,49 @@
+@BASE_URL = http://localhost:3000
+
+GET {{BASE_URL}}
+
+###
+GET {{BASE_URL}}/api/user
+
+###
+GET {{BASE_URL}}/api/user/myemai5jkyghfgl@gmail.com
+
+###
+GET {{BASE_URL}}/api/user/bymail/myemai5jkyghfgl@gmail.com
+###
+POST {{BASE_URL}}/api/user/login
+Content-Type: application/json
+
+{
+    "password":"123123123",
+    "email":"ayse1@gmail.com"
+}
+###
+POST {{BASE_URL}}/api/user/signup
+Content-Type: application/json
+
+{
+        "followersCount": 0,
+        "followingCount": 0,
+        "postCount": 0,
+        "watchedMoviesCount": 0,
+        "watchedlistCount": 0,
+        "followers": [],
+        "followings": [],
+        "name": "ayse2",
+        "password": "123123123",
+        "email": "ayse2@gmail.com",
+        "userName": "ayse2",
+        "userGender":"female"
+}
+###
+PATCH {{BASE_URL}}/api/user/610be5c2e1a71c1bec37dcb0
+Content-Type: application/json
+
+{
+    "name":"ahmet2",
+    "email": "myemai5gl@gmail.orgg"
+}
+
+###
+DELETE {{BASE_URL}}/api/user/610be5c2e1a71bec37dcb2
