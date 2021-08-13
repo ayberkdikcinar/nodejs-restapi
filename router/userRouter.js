@@ -14,23 +14,8 @@ router.get('/me',authMiddleware,userController.getCurrentUser);
 //router.get('/:id',userController.getUserById);
 
 router.get('/bymail/:email',authMiddleware,userController.getUserByEmail);
-router.post('/follow',authMiddleware,async (req,res,next)=>{
-    try{
 
-        const appendingUser = await User.find({email:req.body.email}); //new User(req.body);
-        const result =await req.user.followers.push(appendingUser[0]);
-        await req.user.save();
-        if(result){
-            console.log('User has been added to db');
-            return res.status(200).json(result);
-        }
-        throw createError(404,'Post operation could not performed');
-    }
-    catch(err){
-        next(err);
-    }
-
-});
+router.post('/follow/:id',authMiddleware,userController.followUser);
 router.patch('/me',authMiddleware,userController.updateUser);
 
 router.post('/signup',userController.addUser); ///yani bi nevi sign up.

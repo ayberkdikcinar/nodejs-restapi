@@ -77,12 +77,18 @@ const userSchema = mongoose.Schema({
         min:0,
         default:0
     },
-    followers:{
-        type:[this]
-    },
-    followings:{
-        type:[this]
-    }
+    followers: [
+        { 
+            type: mongoose.Schema.ObjectId, 
+            ref: 'User' 
+        },
+    ],
+    followings: [
+        { 
+            type: mongoose.Schema.ObjectId,
+            ref: 'User' 
+        },
+    ]
 
 },{timestamps:true});
 

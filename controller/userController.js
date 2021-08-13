@@ -110,6 +110,35 @@ const deleteUser = async(req,res,next)=>{
     
 }
 
+const followUser = async(req,res,next)=>{
+ 
+    //console.log(userFollowing);
+    if(req.user._id==req.params.id) return res.send(200).json({message:'You can not follow yourself'});
+    
+    const alreadyFollowing = await req.user.followings.find((userId)=>{
+        return userId==req.params.id;
+    });
+
+    const followedUser = await User.findById(req.params.id);
+
+    if(!alreadyFollowing){
+        req.user.followings.push(req.params.id);
+        await req.user.save();    
+        followedUser.followers.push(req.user._id);
+        await followedUser.save();
+        return res.send(200).json({message:"user has been followed",to:req.params.id,from:req.user._id});   
+    }
+    else{
+        const indexfollowing = req.user.followings.indexOf(req.params.id);
+        const indexfollower =followedUser.followers.indexOf(req.user._id);
+        req.user.followings.splice(indexfollowing,1);
+        await req.user.save();
+        req.user.followings.splice(indexfollower,1);
+        await followedUser.save();
+        return res.send(200).json({message:"user has been unfollowed",to:req.params.id,from:req.user._id});   
+    }
+    
+}
 
 module.exports = {
     getAllUsers,
@@ -120,5 +149,6 @@ module.exports = {
     getCurrentUser,
     addUser,
     deleteUser,
+    followUser,
 
 }
