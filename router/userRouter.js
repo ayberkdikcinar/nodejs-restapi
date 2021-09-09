@@ -2,7 +2,6 @@ const router = require('express').Router();
 const userController = require('../controller/userController');
 const authMiddleware = require('../middleware/authMW');
 const createError = require('http-errors');
-const User = require('../model/userModel');
 ///Kullanıcılar için REST işlemleri. (listAll, listOneById, Update, Delete, append)
 //createErrorda sadece message alanına erişebiliyorum. Status code vs erişilmiyor.
 router.get('/',userController.getAllUsers);
@@ -14,6 +13,8 @@ router.get('/me',authMiddleware,userController.getCurrentUser);
 //router.get('/:id',userController.getUserById);
 
 router.get('/bymail/:email',authMiddleware,userController.getUserByEmail);
+
+router.get('/byid/:id',authMiddleware,userController.getUserById);
 
 router.post('/follow/:id',authMiddleware,userController.followUser);
 router.patch('/me',authMiddleware,userController.updateUser);

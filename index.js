@@ -3,12 +3,14 @@ require('./db/dbConnection');
 require('dotenv').config();
 const app = express();
 const userRouter = require('./router/userRouter');
+const postRouter = require('./router/postRouter');
 const error = require('./middleware/errorHandlingMW');
 
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use('/api/user',userRouter);
+app.use('/api/post',postRouter);
 app.use(error.errorHandling);
 app.use(error.notFoundPage);
 

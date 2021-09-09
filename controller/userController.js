@@ -5,10 +5,10 @@ const login = async(req,res,next)=>{
     try{
     
         const user = await User.authentication(req.body.email,req.body.password);
-        const token = await user.generateToken();
         if(user){
+            const token = await user.generateToken();
+            
             return res.status(200).json({
-                user,
                 token
             });
         }else{
@@ -46,6 +46,7 @@ const getUserById =async(req,res,next)=>{
 const getCurrentUser =async(req,res,next)=>{   
     res.json(req.user);
 }
+
 const getUserByEmail=async(req,res,next)=>{
     try{
         const result = await User.find({email:req.params.email});
@@ -86,7 +87,7 @@ const addUser = async(req,res,next)=>{
         const result =await appendingUser.save();
         if(result){
             console.log('User has been added to db');
-            return res.status(200).json(result);
+            return res.status(200).json({'userName':result.userName,'email':result.email});
         }
         throw createError(404,'Post operation could not performed');
     }

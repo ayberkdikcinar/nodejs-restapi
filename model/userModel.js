@@ -88,9 +88,24 @@ const userSchema = mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: 'User' 
         },
-    ]
+    ],
+  
 
-},{timestamps:true});
+},{
+    timestamps:true,    
+    toObject: {
+        transform: function (doc, ret) {
+            delete ret.password;
+            delete ret.__v;
+        }
+    },
+    toJSON: {
+        transform: function (doc, ret) {
+            delete ret.password;
+            delete ret.__v;
+        }
+    }
+});
 
 
 
@@ -119,6 +134,7 @@ userSchema.methods.joiValidation = function(userObject){
     return schema.validate(userObject);
 
 };
+
 userSchema.methods.generateToken = async function(){
     const loggedUser = this;
     const token =await jwt.sign({_id:loggedUser._id},process.env.SECRET_KEY_TOKEN,{expiresIn:process.env.TOKEN_EXPIRES_TIME});

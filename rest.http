@@ -23,17 +23,11 @@ POST {{BASE_URL}}/api/user/signup
 Content-Type: application/json
 
 {
-        "followersCount": 0,
-        "followingCount": 0,
-        "postCount": 0,
-        "watchedMoviesCount": 0,
-        "watchedlistCount": 0,
-        "followers": [],
-        "followings": [],
+     
         "name": "ayse2",
         "password": "123123123",
-        "email": "ayse2@gmail.com",
-        "userName": "ayse2",
+        "email": "ayse544@gmail.com",
+        "userName": "ayse454",
         "userGender":"female"
 }
 ###
