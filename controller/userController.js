@@ -1,24 +1,7 @@
 const User = require('../model/userModel');
 const createError = require('http-errors');
 
-const login = async(req,res,next)=>{
-    try{
-    
-        const user = await User.authentication(req.body.email,req.body.password);
-        if(user){
-            const token = await user.generateToken();
-            
-            return res.status(200).json({
-                token
-            });
-        }else{
-            throw createError(400,'Username or password is wrong');
-        }   
 
-    }catch(err){
-        next(err);
-    }
-}
 const getAllUsers = async (req,res,next)=>{
     try{
         const result=await User.find();
@@ -77,26 +60,7 @@ const updateUser=async(req,res,next)=>{
     }
   
 }
-const addUser = async(req,res,next)=>{
-    try{
-        const appendingUser = new User(req.body);
-        const {error,value}=appendingUser.joiValidation(req.body);
-        if(error){
-            throw createError(400,error);
-        }
-        const result =await appendingUser.save();
-        if(result){
-            console.log('User has been added to db');
-            return res.status(200).json({'userName':result.userName,'email':result.email});
-        }
-        throw createError(404,'Post operation could not performed');
-    }
-    catch(err){
-        next(err);
-    }
 
-    
-}
 const deleteUser = async(req,res,next)=>{
     try{
         const result =await User.findByIdAndRemove(req.user._id);
@@ -146,9 +110,7 @@ module.exports = {
     getUserById,
     getUserByEmail,
     updateUser,
-    login,
     getCurrentUser,
-    addUser,
     deleteUser,
     followUser,
 

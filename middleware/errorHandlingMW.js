@@ -1,7 +1,7 @@
 
 const errorHandling=((err,req,res,next)=>{
     //console.log('Error handling inside');
-    return res.json(err.message);
+    return res.json({'message':err.message});
     //return res.send('404 NOT FOUND');
 });
 

@@ -19,10 +19,6 @@ router.get('/byid/:id',authMiddleware,userController.getUserById);
 router.post('/follow/:id',authMiddleware,userController.followUser);
 router.patch('/me',authMiddleware,userController.updateUser);
 
-router.post('/signup',userController.addUser); ///yani bi nevi sign up.
-
-router.post('/login',userController.login);
-
 router.delete('/me',authMiddleware,userController.deleteUser);
 
 

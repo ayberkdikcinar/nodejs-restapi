@@ -4,13 +4,15 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const userSchema = mongoose.Schema({
+    active:{
+        type:Boolean,
+        default:false
+    },
     userName:{
         type:String,
-        required:true,
         trim:true,
         maxLength: 30,
         minLength:3,
-        unique:true,
         lowercase:true,
     },
     name:{
@@ -35,7 +37,6 @@ const userSchema = mongoose.Schema({
     },
     userGender:{
         type:String,
-        required:true,
         trim:true,
         enum:['male','female']
     },
