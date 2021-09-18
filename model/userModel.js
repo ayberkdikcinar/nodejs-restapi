@@ -46,17 +46,14 @@ const userSchema = mongoose.Schema({
     description:{
         type:String,
         trim:true,
-        default:''
     },
     photoUrl:{
         type:String,
-        //trim:true,
-        default:''
+        trim:true,
     },
     bannerPhotoUrl:{
         type:String,
         trim:true,
-        default:''
     },
     followersCount:{
         type:Number
@@ -124,25 +121,25 @@ const userSchema = mongoose.Schema({
 });
 
 const schema = Joi.object({
-    name: Joi.string().min(3).max(30).trim(),
-    userName:Joi.string().min(3).max(30).trim(),
+    name: Joi.string().min(3).max(30).trim().allow(''),
+    userName:Joi.string().min(3).max(30).trim().allow(''),
     email:Joi.string().trim().email().lowercase(),
     password:Joi.string().trim(),
-    description:Joi.string(),
-    photoUrl:Joi.string(),
-    bannerPhotoUrl:Joi.string(),
+    description:Joi.string().allow(''),
+    photoUrl:Joi.string().allow(''),
+    bannerPhotoUrl:Joi.string().allow(''),
     followersCount:Joi.number(),
     followingCount:Joi.number(),
     postCount:Joi.number(),
     watchedMoviesCount:Joi.number(),
     watchedlistCount:Joi.number(),
-    followers:Joi.array(),
-    followings:Joi.array(),
-    watchedListMovie:Joi.array(),
-    watchedListTv:Joi.array(),
-    watchListMovie:Joi.array(),
-    watchListTv:Joi.array(),
-    userGender:Joi.string()
+    followers:Joi.array().allow(null),
+    followings:Joi.array().allow(null),
+    watchedListMovie:Joi.array().allow(null),
+    watchedListTv:Joi.array().allow(null),
+    watchListMovie:Joi.array().allow(null),
+    watchListTv:Joi.array().allow(null),
+    userGender:Joi.string().allow(''),
 
 
 });

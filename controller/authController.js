@@ -4,6 +4,7 @@ const User = require('../model/userModel');
 const createError = require('http-errors');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
 
 
@@ -70,7 +71,7 @@ const register = async(req,res,next)=>{
                     from:'Movieet application <info@movieet>',
                     to: newUser.email,
                     subject: 'Please verify your email',
-                    text:'To verify your email, please click the given link:'+url
+                    text:'To verify your email, please click the given link: '+url
                 },(error,info)=>{
                     transport.close();
                 });
@@ -102,8 +103,10 @@ const verifyEmail =async (req,res,next)=>{
             const result= await User.findByIdAndUpdate({_id:decoded.id},{active:true});
             if(result){
                 //res.redirect('your/404/path.html');
+                
                 return res.sendFile(path.join(__dirname+"/../public/verified.html"));
             }
+            
             return res.sendFile(path.join(__dirname+"/../public/not_verified.html"));
            });     
         }
