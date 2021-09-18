@@ -4,8 +4,10 @@ const createError = require('http-errors');
 
 
 const getMyPosts = async (req,res,next)=>{
+    ///tarihe göre verilen sayıya göre. 
     try{
         const result = await Post.find({"owner":req.user._id}).limit(5).sort({'createdAt':-1}).skip(Number(req.params.number));
+        //const result = await Post.find({"owner":req.user._id}).limit(5).sort({'createdAt':-1}).lte({'createdAt':'10.09.2020'});
         if(result){
             return res.status(200).json({result:result,sonGetirilenPost:Number(req.params.number)+4});
         }

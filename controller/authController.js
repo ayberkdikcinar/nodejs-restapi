@@ -49,7 +49,7 @@ const register = async(req,res,next)=>{
             const result = await newUser.save();
 
             if(result){
-                var response='mail has not been send';
+                
                 //using jsonwebtoken for mail
                 const payload = {
                     id:newUser._id

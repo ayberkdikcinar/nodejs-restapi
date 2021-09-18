@@ -6,6 +6,7 @@ const userRouter = require('./router/userRouter');
 const postRouter = require('./router/postRouter');
 const authRouter = require('./router/authRouter');
 const error = require('./middleware/errorHandlingMW');
+const User = require('./model/userModel');
 
 
 app.use(express.json());
@@ -15,7 +16,6 @@ app.use('/api/auth',authRouter);
 app.use('/api/post',postRouter);
 app.use(error.errorHandling);
 app.use(error.notFoundPage);
-
 
 
 app.listen(process.env.PORT,()=>{

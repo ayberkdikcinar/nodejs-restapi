@@ -3,7 +3,10 @@ const Joi = require('@hapi/joi');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
+const watchListSchema  = require('./movieListModel');
+
 const userSchema = mongoose.Schema({
+
     active:{
         type:Boolean,
         default:false
@@ -53,7 +56,7 @@ const userSchema = mongoose.Schema({
     bannerPhotoUrl:{
         type:String,
         trim:true,
-        default:''
+        //default:''
     },
     followersCount:{
         type:Number
@@ -90,6 +93,18 @@ const userSchema = mongoose.Schema({
             ref: 'User' 
         },
     ],
+    watchListTv:[
+        watchListSchema,
+    ],
+    watchListMovie:[
+        watchListSchema,     
+    ],
+    watchedListTv:[
+        watchListSchema
+    ],
+    watchedListMovie:[
+        watchListSchema     
+    ]
   
 
 },{
@@ -108,8 +123,6 @@ const userSchema = mongoose.Schema({
     }
 });
 
-
-
 const schema = Joi.object({
     name: Joi.string().min(3).max(30).trim(),
     userName:Joi.string().min(3).max(30).trim(),
@@ -125,6 +138,10 @@ const schema = Joi.object({
     watchedlistCount:Joi.number(),
     followers:Joi.array(),
     followings:Joi.array(),
+    watchedListMovie:Joi.array(),
+    watchedListTv:Joi.array(),
+    watchListMovie:Joi.array(),
+    watchListTv:Joi.array(),
     userGender:Joi.string()
 
 
@@ -164,5 +181,6 @@ userSchema.statics.authentication = async function(email,inPassword){
 
 
 const User = mongoose.model('user',userSchema);
+
 
 module.exports = User;

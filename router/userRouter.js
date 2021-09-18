@@ -22,5 +22,8 @@ router.patch('/me',authMiddleware,userController.updateUser);
 router.delete('/me',authMiddleware,userController.deleteUser);
 
 
+router.post('/addToList/:isMovie/:isWatchList',authMiddleware,userController.addToList);
+
+
 module.exports= router;
 

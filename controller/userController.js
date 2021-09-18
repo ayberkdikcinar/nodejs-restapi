@@ -105,6 +105,56 @@ const followUser = async(req,res,next)=>{
     
 }
 
+
+const addToList = async(req,res,next)=>{
+    try{
+        let response='';
+        const isMovie = req.params.isMovie;
+        const isWatchList = req.params.isWatchList;
+
+        const user = await User.findById(req.user._id);
+        
+        const movieModel = {
+            movieId:req.body.movieId,
+            moviePosterUrl:req.body.moviePosterUrl,
+            ownerRate:req.body.ownerRate
+        };
+
+        if(isMovie=='true'){ 
+            if(isWatchList=='true') response= checkItemExistanceAndPush(user.watchListMovie,movieModel);   
+            else response= checkItemExistanceAndPush(user.watchedListMovie,movieModel);           
+        }
+        else{
+            if(isWatchList=='true')  response= checkItemExistanceAndPush(user.watchListTv,movieModel);          
+            else response= checkItemExistanceAndPush(user.watchedListTv,movieModel);           
+        }
+
+        if(response=='already exist')return res.json({'message':response});
+
+        const result = await user.save();
+        
+        if(result) return res.status(201).json({'message':true});
+        else return res.status(400).json({'message':false});
+        
+
+    }catch(err){
+        console.log('error abiiş:   '+err);
+        return res.status(500).json({'message':false});
+    }
+}
+
+const checkItemExistanceAndPush = function(myArray,movieModel){
+    
+    const response= myArray.filter((element)=>{
+        return element.movieId==movieModel.movieId;     
+    });
+    if(response.length>0) return 'already exist';    
+    else{
+        myArray.push(movieModel);
+        return true;
+    }
+}
+
 module.exports = {
     getAllUsers,
     getUserById,
@@ -113,5 +163,6 @@ module.exports = {
     getCurrentUser,
     deleteUser,
     followUser,
+    addToList
 
 }
