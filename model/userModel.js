@@ -46,17 +46,17 @@ const userSchema = mongoose.Schema({
     description:{
         type:String,
         trim:true,
-        //default:'This is description'
+        default:''
     },
     photoUrl:{
         type:String,
         //trim:true,
-        //default:''
+        default:''
     },
     bannerPhotoUrl:{
         type:String,
         trim:true,
-        //default:''
+        default:''
     },
     followersCount:{
         type:Number

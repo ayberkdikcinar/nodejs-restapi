@@ -19,6 +19,7 @@
     "http-errors": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.5",
-    "nodemailer": "^6.6.3"
+    "nodemailer": "^6.6.3",
+    "path": "^0.12.7"
   }
 }

@@ -101,13 +101,14 @@ const verifyEmail =async (req,res,next)=>{
     
             const result= await User.findByIdAndUpdate({_id:decoded.id},{active:true});
             if(result){
-                return res.status(201).send({'message':'true'});
+                //res.redirect('your/404/path.html');
+                return res.sendFile(path.join(__dirname+"/../public/verified.html"));
             }
-            return res.status(500).send({message:'false'}); 
+            return res.sendFile(path.join(__dirname+"/../public/not_verified.html"));
            });     
         }
         else{
-            return res.status(500).send({'message':'token does not exist'});
+            return res.sendFile(path.join(__dirname+"/../public/not_verified.html"));
         }
     }
     catch(err){
