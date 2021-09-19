@@ -45,10 +45,10 @@ const getUserByEmail=async(req,res,next)=>{
 const updateUser=async(req,res,next)=>{
     try{
 
-        const {error,value}=User.joiValidationUpdate(req.body);
+        /*const {error,value}=User.joiValidationUpdate(req.body);
         if(error){
             throw createError(400,error);
-        }
+        }*/
         const result = await User.findByIdAndUpdate(req.user._id,req.body,{new:true,runValidators:true});
         if(result){
             return res.status(200).json(result);

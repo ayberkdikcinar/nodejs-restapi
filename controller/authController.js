@@ -43,10 +43,10 @@ const register = async(req,res,next)=>{
                 await User.findByIdAndRemove({_id:user._id});
             }
             const newUser = new User(req.body);
-            const {error,value}=newUser.joiValidation(req.body);
+            /*const {error,value}=newUser.joiValidation(req.body);
             if(error){
                 throw createError(400,error);
-            }
+            }*/
             const result = await newUser.save();
 
             if(result){

@@ -120,7 +120,7 @@ const userSchema = mongoose.Schema({
     }
 });
 
-const schema = Joi.object({
+/*const schema = Joi.object({
     name: Joi.string().min(3).max(30).trim().allow(''),
     userName:Joi.string().min(3).max(30).trim().allow(''),
     email:Joi.string().trim().email().lowercase(),
@@ -142,13 +142,17 @@ const schema = Joi.object({
     userGender:Joi.string().allow(''),
 
 
-});
+});x
 
 userSchema.methods.joiValidation = function(userObject){
     schema.required();
     return schema.validate(userObject);
 
 };
+userSchema.statics.joiValidationUpdate = function(userObject){
+    return schema.validate(userObject);
+
+};*/
 
 userSchema.methods.generateToken = async function(){
     const loggedUser = this;
@@ -157,10 +161,7 @@ userSchema.methods.generateToken = async function(){
 
 
 };
-userSchema.statics.joiValidationUpdate = function(userObject){
-    return schema.validate(userObject);
 
-};
 userSchema.statics.authentication = async function(email,inPassword){
     const {error,value} = schema.validate({email,password:inPassword});
     if(!error){
