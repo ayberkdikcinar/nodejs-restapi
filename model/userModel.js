@@ -20,7 +20,6 @@ const userSchema = mongoose.Schema({
     },
     name:{
         type:String,
-        required:true,
         trim:true,
         maxLength: 30,
         minLength:3
@@ -163,16 +162,15 @@ userSchema.methods.generateToken = async function(){
 };
 
 userSchema.statics.authentication = async function(email,inPassword){
-    const {error,value} = schema.validate({email,password:inPassword});
-    if(!error){
-        const currentUser = await User.findOne({email:email});
-        if(currentUser){
-            if(currentUser.password === inPassword)
-                return currentUser;
-        }
-        return null;
+    //const {error,value} = schema.validate({email,password:inPassword});
+
+    const currentUser = await User.findOne({email:email});
+    if(currentUser){
+        if(currentUser.password === inPassword)
+            return currentUser;
     }
-    throw error;
+    return null;
+   
 
 
 };
