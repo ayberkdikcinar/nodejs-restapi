@@ -5,28 +5,38 @@ require('dotenv').config();
 const admin = require('../config/firebase-config');
 
 
-const auth = async(req,res,next)=>{
+const authCheck = async(req,res,next)=>{
     try{  
-        const token = req.header('Authorization');
+        let token = req.header('Authorization');
+        const isFirebase =req.header('firebase');
+        console.log(isFirebase);
         if(token){
-            token.replace('Bearer ','');
-            const decodeValue = await admin.auth().verifyIdToken(token);
-            const result =jwt.verify(token,process.env.SECRET_KEY_TOKEN);
-            //console.log(result);
-            if(result || decodeValue){
-                if(result){
-                    req.user = await User.findById(result._id);
-                }else{
+            token=token.replace('Bearer ','');
+
+            if(isFirebase=='true'){
+                console.log('im here');
+                const decodeValue= await admin.auth().verifyIdToken(token);
+                if(decodeValue){
                     const isUserRegistered = await User.findOne({'email':decodeValue.email});
                     if(isUserRegistered)
                         req.user = isUserRegistered;
                     else{
                         const newUser = new User({'email':decodeValue.email,'photoUrl':decodeValue.picture,'name':decodeValue.name});
                         await newUser.save();
+                        req.user = newUser;
                     }
+                    return next();
                 }
-             return next();  
             }
+            else{
+                console.log('im here2');
+                const result =jwt.verify(token,process.env.SECRET_KEY_TOKEN);
+                if(result){
+                    req.user = await User.findById(result._id);
+                    return next();
+                }
+            }
+            
             return res.json({'message':'Token is not valid.'});
         }
         else{
@@ -39,4 +49,4 @@ const auth = async(req,res,next)=>{
         next(err);
     }
 }
-module.exports =auth
+module.exports =authCheck
