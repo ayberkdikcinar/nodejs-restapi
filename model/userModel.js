@@ -158,7 +158,6 @@ userSchema.methods.generateToken = async function(){
 
 userSchema.statics.authentication = async function(email,inPassword){
     //const {error,value} = schema.validate({email,password:inPassword});
-
     const currentUser = await User.findOne({email:email});
     if(currentUser){
         if(currentUser.password === inPassword)
@@ -169,6 +168,15 @@ userSchema.statics.authentication = async function(email,inPassword){
 
 
 };
+userSchema.methods.toAuthJSON = async function(){    
+    return {
+    _id: this.id,
+    username: this.username,
+    password:this.password,
+    token: await this.generateToken(),
+    };
+};
+
 
 
 const User = mongoose.model('user',userSchema);

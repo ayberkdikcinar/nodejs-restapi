@@ -11,6 +11,7 @@ router.get('/',userController.getAllUsers);
 router.get('/me',authMiddleware,userController.getCurrentUser);
 
 //router.get('/:id',userController.getUserById);
+//router.post("/google", authMiddleware.authGoogle, userController.googleSignup);
 
 router.get('/bymail/:email',authMiddleware,userController.getUserByEmail);
 

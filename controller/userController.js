@@ -154,7 +154,11 @@ const checkItemExistanceAndPush = function(myArray,movieModel){
         return true;
     }
 }
+const googleSignup = async (req, res, next) => {
 
+    await res.status(201).json(req.user.toAuthJSON());
+    return next();
+};
 module.exports = {
     getAllUsers,
     getUserById,
@@ -163,6 +167,7 @@ module.exports = {
     getCurrentUser,
     deleteUser,
     followUser,
-    addToList
+    addToList,
+    googleSignup
 
 }

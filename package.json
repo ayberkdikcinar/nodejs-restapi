@@ -16,10 +16,13 @@
     "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "firebase-admin": "^9.11.1",
     "http-errors": "^1.8.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.5",
     "nodemailer": "^6.6.3",
+    "passport": "^0.4.1",
+    "passport-google-token": "^0.1.2",
     "path": "^0.12.7"
   }
 }
