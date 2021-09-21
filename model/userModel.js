@@ -6,14 +6,15 @@ require('dotenv').config();
 const watchListSchema  = require('./movieListModel');
 
 const userSchema = mongoose.Schema({
-    userId:{
-        type:String,
-        unique:true,
-    },
+
     /*active:{
         type:Boolean,
         default:false
     },*/
+    userID:{
+        type:String,
+        unique:true,
+    },
     userName:{
         type:String,
         trim:true,

@@ -18,8 +18,8 @@ const authCheck = async(req,res,next)=>{
                 if(isUserRegistered)
                     req.user = isUserRegistered;
                 else{
-                    const newUser = new User({'email':decodeValue.email,'photoUrl':decodeValue.picture,
-                    'name':decodeValue.name,'userID':decodeValue.uid});
+                    const newUser = new User({'email':decodeValue.email,
+                    'photoUrl':decodeValue.picture,'name':decodeValue.name,'userID':decodeValue.uid});
                     await newUser.save();
                     req.user = newUser;
                 }
