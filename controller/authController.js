@@ -121,12 +121,6 @@ const verifyEmail =async (req,res,next)=>{
    
 }
 
-
-
-
-const loginWithGoogle = async(req,res,next)=>{
-    const idToken=req.body.idToken;
-}
 module.exports ={
     login,
     register,
