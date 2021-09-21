@@ -16,7 +16,7 @@ const getAllUsers = async (req,res,next)=>{
 };
 const getUserById =async(req,res,next)=>{
     try{
-        const result = await User.findById(req.params.id);
+        const result = await User.findOne({'userID':req.params.id});
         if(result){
             return res.status(200).json(result);
         }
@@ -44,16 +44,12 @@ const getUserByEmail=async(req,res,next)=>{
 }
 const updateUser=async(req,res,next)=>{
     try{
-
-        /*const {error,value}=User.joiValidationUpdate(req.body);
-        if(error){
-            throw createError(400,error);
-        }*/
-        const result = await User.findByIdAndUpdate(req.user._id,req.body,{new:true,runValidators:true});
+        const result=await User.findOneAndUpdate({'userID':req.user.userID},req.body,{new:true,runValidators:true})
+        //const result = await User.findByIdAndUpdate(req.user._id,req.body,{new:true,runValidators:true});
         if(result){
             return res.status(200).json(result);
         }
-        throw createError(404,'Patch operation could not performed on user id: '+req.user._id);
+        throw createError(404,'Patch operation could not performed on user id: '+req.user.userID);
         
     }catch(err){
         next(err);
@@ -63,12 +59,12 @@ const updateUser=async(req,res,next)=>{
 
 const deleteUser = async(req,res,next)=>{
     try{
-        const result =await User.findByIdAndRemove(req.user._id);
+        const result =await User.findOneAndRemove(req.user.userID);
         if(result){
             return res.status(200).json(result);
         }
         
-        throw createError(404,'Delete operation could not performed on user id:'+req.user._id);
+        throw createError(404,'Delete operation could not performed on user id:'+req.user.userID);
     }catch(err){
         next(err);
     }
@@ -78,29 +74,29 @@ const deleteUser = async(req,res,next)=>{
 const followUser = async(req,res,next)=>{
  
     //console.log(userFollowing);
-    if(req.user._id==req.params.id) return res.status(200).json({message:'You can not follow yourself'});
+    if(req.user.userID==req.params.id) return res.status(200).json({message:'You can not follow yourself'});
     
     const alreadyFollowing = await req.user.followings.find((userId)=>{
         return userId==req.params.id;
     });
 
-    const followedUser = await User.findById(req.params.id);
+    const followedUser = await User.findOne(req.params.id);
 
     if(!alreadyFollowing){
         req.user.followings.push(req.params.id);
         await req.user.save();    
-        followedUser.followers.push(req.user._id);
+        followedUser.followers.push(req.user.userID);
         await followedUser.save();
-        return res.status(200).json({message:"user has been followed",to:req.params.id,from:req.user._id});   
+        return res.status(200).json({message:"user has been followed",to:req.params.id,from:req.user.userID});   
     }
     else{
         const indexfollowing = req.user.followings.indexOf(req.params.id);
-        const indexfollower =followedUser.followers.indexOf(req.user._id);
+        const indexfollower =followedUser.followers.indexOf(req.user.userID);
         req.user.followings.splice(indexfollowing,1);
         await req.user.save();
         followedUser.followers.splice(indexfollower,1);
         await followedUser.save();
-        return res.status(200).json({message:"user has been unfollowed",to:req.params.id,from:req.user._id});   
+        return res.status(200).json({message:"user has been unfollowed",to:req.params.id,from:req.user.userID});   
     }
     
 }
@@ -112,7 +108,7 @@ const addToList = async(req,res,next)=>{
         const isMovie = req.params.isMovie;
         const isWatchList = req.params.isWatchList;
 
-        const user = await User.findById(req.user._id);
+        const user = await User.findOne(req.user.userID);
         
         const movieModel = {
             movieId:req.body.movieId,
@@ -154,11 +150,11 @@ const checkItemExistanceAndPush = function(myArray,movieModel){
         return true;
     }
 }
-const googleSignup = async (req, res, next) => {
+/*const googleSignup = async (req, res, next) => {
 
     await res.status(201).json(req.user.toAuthJSON());
     return next();
-};
+};*/
 module.exports = {
     getAllUsers,
     getUserById,
@@ -167,7 +163,6 @@ module.exports = {
     getCurrentUser,
     deleteUser,
     followUser,
-    addToList,
-    googleSignup
+    addToList
 
 }
