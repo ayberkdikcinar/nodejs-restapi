@@ -22,9 +22,9 @@ router.patch('/me',authMiddleware,userController.updateUser);
 
 router.delete('/me',authMiddleware,userController.deleteUser);
 
-
+router.get('/watchlist',authMiddleware,userController.getFromWatcListMovie);
 router.post('/addToList/:isMovie/:isWatchList',authMiddleware,userController.addToList);
-
+router.get('/search/:str',userController.searchUser);
 
 module.exports= router;
 

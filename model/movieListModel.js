@@ -28,4 +28,5 @@ const movieListSchema  = mongoose.Schema({
     }}
 );
 
+
 module.exports = movieListSchema;

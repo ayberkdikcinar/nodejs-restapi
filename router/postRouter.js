@@ -14,10 +14,10 @@ router.get('/followings/:date/:number',authMiddleware,postController.getFollowin
 /// login olmuş kullanıcının post atma işlemi
 router.post('/',authMiddleware,postController.sendPost);
 
-router.get('/all/:userId',authMiddleware,postController.getAllPostsByUserId);
+router.get('/allbyid/:userID',authMiddleware,postController.getAllPostsByUserId);
 //herokuapp.movieet.com/api/post/
-router.get('/:userId/:date/:number',authMiddleware,postController.getLimitedPostByUserId);
+router.get('/limitedbyid/:userId/:date/:number',authMiddleware,postController.getLimitedPostByUserId);
 //body -> post modeldeki şeyi koyuyon
-
+router.get('/limited/:date/:number',authMiddleware,postController.getAllPostsWithLimit);
 
 module.exports= router;

@@ -1,6 +1,6 @@
 const User = require('../model/userModel');
 const createError = require('http-errors');
-
+const watchListModel  = require('../model/movieListModel');
 
 const getAllUsers = async (req,res,next)=>{
     try{
@@ -76,22 +76,24 @@ const followUser = async(req,res,next)=>{
     //console.log(userFollowing);
     if(req.user.userID==req.params.id) return res.status(200).json({message:'You can not follow yourself'});
     
-    const alreadyFollowing = await req.user.followings.find((userId)=>{
-        return userId==req.params.id;
-    });
-
     const followedUser = await User.findOne(req.params.id);
 
+    const alreadyFollowing = await req.user.followings.find((userId)=>{
+        return userId==followedUser._id;
+    });
+
+    //const followedUser = await User.findOne(req.params.id);
+
     if(!alreadyFollowing){
-        req.user.followings.push(req.params.id);
+        req.user.followings.push(followedUser._id);
         await req.user.save();    
-        followedUser.followers.push(req.user.userID);
+        followedUser.followers.push(req.user._id);
         await followedUser.save();
         return res.status(200).json({message:"user has been followed",to:req.params.id,from:req.user.userID});   
     }
     else{
-        const indexfollowing = req.user.followings.indexOf(req.params.id);
-        const indexfollower =followedUser.followers.indexOf(req.user.userID);
+        const indexfollowing = req.user.followings.indexOf(followedUser._id);
+        const indexfollower =followedUser.followers.indexOf(req.user._id);
         req.user.followings.splice(indexfollowing,1);
         await req.user.save();
         followedUser.followers.splice(indexfollower,1);
@@ -100,7 +102,21 @@ const followUser = async(req,res,next)=>{
     }
     
 }
+const searchUser = async(req,res,next)=>{
 
+    let colName = req.params.str;
+    const userList = await User.find({ "userName": { $regex: '.*' + colName + '.*' }}).limit(10);
+    res.status(200).json({'userList':userList});
+
+}
+
+const getFromWatcListMovie = async(req,res,next)=>{
+
+    const user = await User.find({_id:req.user._id}).select('watchListMovie').sort({'createdAt':-1}).limit(1);
+    res.json(user);
+    
+
+}
 
 const addToList = async(req,res,next)=>{
     try{
@@ -108,14 +124,16 @@ const addToList = async(req,res,next)=>{
         const isMovie = req.params.isMovie;
         const isWatchList = req.params.isWatchList;
 
-        const user = await User.findOne(req.user.userID);
+        const user = req.user;
         
-        const movieModel = {
+        const movieModel ={
             movieId:req.body.movieId,
             moviePosterUrl:req.body.moviePosterUrl,
             ownerRate:req.body.ownerRate
         };
-
+       
+        
+            
         if(isMovie=='true'){ 
             if(isWatchList=='true') response= checkItemExistanceAndPush(user.watchListMovie,movieModel);   
             else response= checkItemExistanceAndPush(user.watchedListMovie,movieModel);           
@@ -124,6 +142,8 @@ const addToList = async(req,res,next)=>{
             if(isWatchList=='true')  response= checkItemExistanceAndPush(user.watchListTv,movieModel);          
             else response= checkItemExistanceAndPush(user.watchedListTv,movieModel);           
         }
+
+
 
         if(response=='already exist')return res.json({'message':response});
 
@@ -163,6 +183,8 @@ module.exports = {
     getCurrentUser,
     deleteUser,
     followUser,
-    addToList
+    addToList,
+    getFromWatcListMovie,
+    searchUser
 
 }

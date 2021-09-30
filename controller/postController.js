@@ -7,6 +7,7 @@ const getMyPosts = async (req,res,next)=>{
     ///tarihe göre verilen sayıya göre. 
     try{
         //const result = await Post.find({"owner":req.user._id}).limit(5).sort({'createdAt':-1}).skip(Number(req.params.number));
+        if(req.params.date=='null') req.params.date=Date.now();
         const result = await Post.find({"owner":req.user._id}).limit(Number(req.params.number))
         .sort({'createdAt':-1}).where('createdAt').gte(req.params.date);
 
@@ -21,13 +22,15 @@ const getMyPosts = async (req,res,next)=>{
 };
 const getFollowingPosts = async(req,res,next)=>{
     try{
-        const user = await User.findOne(req.user.userID);
-        
+        const user = await User.findOne({'userID':req.user.userID});
+        if(req.params.date=='null') req.params.date=Date.now();
         // takip ettiği kişilerin son attığı postların girilen sayıdan itibaren 5tanesini listeler.
-        const result = await Post.find({"owner":{$in:user.followings}}).limit(5).sort({'createdAt':-1}).skip(Number(req.params.number));
-      
+        const result = await Post.find({"owner":{$in:user.followings}}).limit(Number(req.params.number))
+        .sort({'createdAt':-1}).where('createdAt').gte(req.params.date);
+
         if(result){
-            return res.status(200).json({result:result,sonGetirilenPost:Number(req.params.number)+4});
+            const lastDate=result[(result.length)-1].createdAt;
+            return res.status(200).json({result:result,sonGetirilenPostTarihi:lastDate});
         }
         throw createError(404,'there is no post found');
     }catch(err){
@@ -40,7 +43,7 @@ const getLimitedPostByUserId = async (req,res,next)=>{
     try{
 
         const user = await User.findOne({'userID':req.params.userId});
-
+        if(req.params.date=='null') req.params.date=Date.now();
         const result = await Post.find({"owner":user._id}).limit(Number(req.params.number))
         .sort({'createdAt':-1}).where('createdAt').gte(req.params.date);
 
@@ -56,8 +59,8 @@ const getLimitedPostByUserId = async (req,res,next)=>{
 
 const getAllPostsByUserId = async(req,res,next)=>{
     try{
-        const user = await User.findOne({'userID':req.params.userId});
-    
+        const user = await User.findOne({'userID':req.params.userID});
+        if(req.params.date=='null') req.params.date=Date.now();
         const result = await Post.find({"owner":user._id}).limit(Number(req.params.number)).sort({'createdAt':-1})
         .where('createdAt').gte(req.params.date);
         
@@ -88,10 +91,28 @@ const sendPost = async (req,res)=>{
     
 };
 
+const getAllPostsWithLimit = async(req,res,next)=>{
+    try{
+        if(req.params.date=='null') req.params.date=Date.now();
+
+        const result = await Post.find().limit(Number(req.params.number)).sort({'createdAt':-1})
+        .where('createdAt').gte(req.params.date);
+
+        if(result){
+            const lastDate=result[(result.length)-1].createdAt;
+            return res.status(200).json({result:result,sonGetirilenPostTarihi:lastDate});
+        }
+        throw createError(404,'there is no post found for');
+    }catch(err){
+        next(err);
+    }
+
+}
 module.exports = {
     sendPost,
     getFollowingPosts,
     getMyPosts,
     getAllPostsByUserId,
-    getLimitedPostByUserId
+    getLimitedPostByUserId,
+    getAllPostsWithLimit
 }

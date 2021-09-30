@@ -3,14 +3,17 @@ const Joi = require('@hapi/joi');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const watchListSchema  = require('./movieListModel');
+const watchListModel  = require('./movieListModel');
 
 const userSchema = mongoose.Schema({
 
-    /*active:{
+    active:{
         type:Boolean,
         default:false
-    },*/
+    },
+    password:{
+        type:String
+    },
     userID:{
         type:String,
         unique:true,
@@ -77,26 +80,28 @@ const userSchema = mongoose.Schema({
     followers: [
         { 
             type: mongoose.Schema.ObjectId, 
-            ref: 'User' 
+            ref: 'user' 
         },
     ],
     followings: [
         { 
             type: mongoose.Schema.ObjectId,
-            ref: 'User' 
+            ref: 'user' 
         },
     ],
     watchListTv:[
-        watchListSchema,
+        watchListModel
     ],
     watchListMovie:[
-        watchListSchema,     
+        watchListModel
+             
     ],
     watchedListTv:[
-        watchListSchema
+        watchListModel
+
     ],
     watchedListMovie:[
-        watchListSchema     
+        watchListModel    
     ]
   
 
@@ -175,6 +180,7 @@ userSchema.methods.toAuthJSON = async function(){
     _id: this.id,
     username: this.username,
     password:this.password,
+    userID:this.userID,
     token: await this.generateToken(),
     };
 };
