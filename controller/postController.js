@@ -7,7 +7,7 @@ const getMyPosts = async (req,res,next)=>{
     ///tarihe göre verilen sayıya göre. 
     try{
         //const result = await Post.find({"owner":req.user._id}).limit(5).sort({'createdAt':-1}).skip(Number(req.params.number));
-        if(req.params.date=='null') req.params.date=Date.now();
+       
         const result = await Post.find({"owner":req.user._id}).limit(Number(req.params.number))
         .sort({'createdAt':-1}).where('createdAt').gte(req.params.date);
 
@@ -23,7 +23,7 @@ const getMyPosts = async (req,res,next)=>{
 const getFollowingPosts = async(req,res,next)=>{
     try{
         const user = await User.findOne({'userID':req.user.userID});
-        if(req.params.date=='null') req.params.date=Date.now();
+       
         // takip ettiği kişilerin son attığı postların girilen sayıdan itibaren 5tanesini listeler.
         const result = await Post.find({"owner":{$in:user.followings}}).limit(Number(req.params.number))
         .sort({'createdAt':-1}).where('createdAt').gte(req.params.date);
@@ -43,7 +43,7 @@ const getLimitedPostByUserId = async (req,res,next)=>{
     try{
 
         const user = await User.findOne({'userID':req.params.userId});
-        if(req.params.date=='null') req.params.date=Date.now();
+        
         const result = await Post.find({"owner":user._id}).limit(Number(req.params.number))
         .sort({'createdAt':-1}).where('createdAt').gte(req.params.date);
 
@@ -60,7 +60,7 @@ const getLimitedPostByUserId = async (req,res,next)=>{
 const getAllPostsByUserId = async(req,res,next)=>{
     try{
         const user = await User.findOne({'userID':req.params.userID});
-        if(req.params.date=='null') req.params.date=Date.now();
+ 
         const result = await Post.find({"owner":user._id}).limit(Number(req.params.number)).sort({'createdAt':-1})
         .where('createdAt').gte(req.params.date);
         
@@ -93,7 +93,6 @@ const sendPost = async (req,res)=>{
 
 const getAllPostsWithLimit = async(req,res,next)=>{
     try{
-        if(req.params.date=='null') req.params.date=Date.now();
 
         const result = await Post.find().limit(Number(req.params.number)).sort({'createdAt':-1})
         .where('createdAt').gte(req.params.date);

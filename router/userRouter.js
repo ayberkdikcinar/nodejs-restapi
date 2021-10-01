@@ -16,7 +16,7 @@ router.get('/me',authMiddleware,userController.getCurrentUser);
 router.get('/bymail/:email',authMiddleware,userController.getUserByEmail);
 
 router.get('/byid/:id',authMiddleware,userController.getUserById);
-
+router.get('/byidmongoose/:id',authMiddleware,userController.getUserByIdMongoose);
 router.post('/follow/:id',authMiddleware,userController.followUser);
 router.patch('/me',authMiddleware,userController.updateUser);
 

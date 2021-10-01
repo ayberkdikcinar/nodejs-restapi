@@ -26,6 +26,18 @@ const getUserById =async(req,res,next)=>{
     }
     
 }
+const getUserByIdMongoose =async(req,res,next)=>{
+    try{
+        const result = await User.findById({'_id':req.params.id});
+        if(result){
+            return res.status(200).json(result);
+        }
+        throw createError(404,'there is no user found by id: '+req.params.id);
+    }catch(err){
+        next(err);
+    }
+    
+}
 const getCurrentUser =async(req,res,next)=>{   
     res.json(req.user);
 }
@@ -185,6 +197,7 @@ module.exports = {
     followUser,
     addToList,
     getFromWatcListMovie,
-    searchUser
+    searchUser,
+    getUserByIdMongoose
 
 }

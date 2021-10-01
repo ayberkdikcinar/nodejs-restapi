@@ -18,6 +18,6 @@ router.get('/allbyid/:userID',authMiddleware,postController.getAllPostsByUserId)
 //herokuapp.movieet.com/api/post/
 router.get('/limitedbyid/:userId/:date/:number',authMiddleware,postController.getLimitedPostByUserId);
 //body -> post modeldeki şeyi koyuyon
-router.get('/limited/:date/:number',authMiddleware,postController.getAllPostsWithLimit);
+router.get('/limited/:date/:number',postController.getAllPostsWithLimit);
 
 module.exports= router;
