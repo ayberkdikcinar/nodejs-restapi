@@ -118,14 +118,14 @@ const searchUser = async(req,res,next)=>{
 
     let colName = req.params.str;
     const userList = await User.find({ "userName": { $regex: '.*' + colName + '.*' }}).limit(10);
-    res.status(200).json({'userList':userList});
+    res.status(200).json(userList);
 
 }
 
 const getFromWatcListMovie = async(req,res,next)=>{
 
     const user = await User.find({_id:req.user._id}).select('watchListMovie').sort({'createdAt':-1}).limit(1);
-    res.json(user);
+    res.status(200).json(user);
     
 
 }
